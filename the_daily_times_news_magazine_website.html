@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE DAILY TIMES | Global News, Politics, Tech & Culture</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Editorial Google Fonts: Playfair Display & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Inter"', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'serif'],
+                    },
+                    colors: {
+                        paper: '#faf9f6',
+                        ink: '#111827',
+                        crimson: '#b91c1c',
+                        slateborder: '#e5e7eb'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #faf9f6;
+            color: #111827;
+        }
+
+        /* Subtle Editorial Ticker Animation */
+        @keyframes ticker-slide {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+        .ticker-track {
+            display: flex;
+            width: max-content;
+            animation: ticker-slide 34s linear infinite;
+        }
+        .ticker-track:hover {
+            animation-play-state: paused;
+        }
+
+        /* Smooth image zoom on card hover */
+        .editorial-card:hover .editorial-img {
+            transform: scale(1.04);
+        }
+    </style>
+</head>
+<body class="bg-paper text-ink font-sans antialiased selection:bg-crimson selection:text-white overflow-x-hidden">
+
+    <!-- ==================== 1. HEADER & NAVIGATION SECTION ==================== -->
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-40 shadow-sm">
+        <!-- Top Utility Strip -->
+        <div class="border-b border-gray-100 bg-gray-50/80 px-4 sm:px-8 py-1.5 text-xs text-gray-600">
+            <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-4">
+                    <span id="current-date" class="font-medium text-gray-800">Tuesday, November 24, 2026</span>
+                    <span class="hidden sm:inline text-gray-300">|</span>
+                    <span class="hidden sm:inline">International Digital Edition</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span class="hidden md:inline text-emerald-700 font-semibold">S&amp;P 500 +0.84%</span>
+                    <span class="hidden md:inline text-gray-300">|</span>
+                    <button onclick="openSubscribeModal()" class="text-crimson font-semibold hover:underline">Digital Access: $1/week</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Masthead: Search Bar, Brand Logo, Subscribe Button -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-8 py-4 sm:py-5">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                
+                <!-- Left: Search Bar -->
+                <div class="w-full md:w-64 order-2 md:order-1">
+                    <div class="relative">
+                        <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                        <input 
+                            type="text" 
+                            id="news-search-input" 
+                            placeholder="Search headlines, topics..." 
+                            class="w-full bg-gray-100 hover:bg-gray-200/70 focus:bg-white border border-gray-200 focus:border-ink rounded-full pl-10 pr-8 py-2 text-xs sm:text-sm text-ink placeholder-gray-500 focus:outline-none transition-all"
+                        >
+                        <button id="clear-search-btn" aria-label="Clear Search" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-ink">
+                            <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Center: Website Logo & Name "THE DAILY TIMES" -->
+                <a href="#top" class="order-1 md:order-2 flex items-center gap-3 text-center group">
+                    <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-ink text-white flex items-center justify-center shadow-md group-hover:bg-crimson transition-colors">
+                        <i data-lucide="newspaper" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+                    </div>
+                    <div>
+                        <span class="font-serif text-2xl sm:text-4xl font-extrabold tracking-tight text-ink block leading-none">
+                            THE DAILY TIMES
+                        </span>
+                        <span class="text-[10px] uppercase tracking-[0.28em] text-gray-500 font-semibold block mt-1">
+                            Truth &bull; Depth &bull; Perspective
+                        </span>
+                    </div>
+                </a>
+
+                <!-- Right: Subscribe Button & Mobile Menu Toggle -->
+                <div class="order-3 flex items-center gap-2.5 self-end md:self-auto">
+                    <button onclick="openSubscribeModal()" class="inline-flex items-center gap-2 bg-crimson hover:bg-red-800 text-white text-xs sm:text-sm font-bold px-5 py-2.5 rounded-full shadow-sm transition-all active:scale-95">
+                        <i data-lucide="mail" class="w-4 h-4"></i>
+                        <span>Subscribe</span>
+                    </button>
+                    <button id="mobile-menu-btn" aria-label="Toggle Navigation" class="lg:hidden p-2.5 rounded-xl border border-gray-200 text-ink hover:bg-gray-100">
+                        <i data-lucide="menu" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Primary Navigation Bar -->
+        <nav class="border-t border-b border-gray-200 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-8">
+                <!-- Desktop Nav Links -->
+                <ul class="hidden lg:flex items-center justify-center gap-8 py-3 text-xs font-bold uppercase tracking-wider text-gray-700">
+                    <li><a href="#top" onclick="filterByNav('All')" class="nav-link text-crimson border-b-2 border-crimson pb-1">Home</a></li>
+                    <li><a href="#categories-section" onclick="filterByNav('World News')" class="nav-link hover:text-crimson transition-colors">World</a></li>
+                    <li><a href="#featured-section" onclick="filterByNav('Politics')" class="nav-link hover:text-crimson transition-colors">Politics</a></li>
+                    <li><a href="#categories-section" onclick="filterByNav('Technology')" class="nav-link hover:text-crimson transition-colors">Technology</a></li>
+                    <li><a href="#categories-section" onclick="filterByNav('Sports')" class="nav-link hover:text-crimson transition-colors">Sports</a></li>
+                    <li><a href="#categories-section" onclick="filterByNav('Entertainment')" class="nav-link hover:text-crimson transition-colors">Entertainment</a></li>
+                    <li><a href="#latest-section" onclick="filterByNav('Business')" class="nav-link hover:text-crimson transition-colors">Business</a></li>
+                    <li><a href="#latest-section" onclick="filterByNav('Lifestyle')" class="nav-link hover:text-crimson transition-colors">Lifestyle</a></li>
+                </ul>
+
+                <!-- Mobile Collapsible Nav Links -->
+                <div id="mobile-nav-drawer" class="hidden lg:hidden py-3 flex flex-wrap gap-2 justify-center">
+                    <a href="#top" onclick="filterByNav('All')" class="px-3.5 py-1.5 rounded-full bg-ink text-white text-xs font-semibold">Home</a>
+                    <a href="#categories-section" onclick="filterByNav('World News')" class="px-3.5 py-1.5 rounded-full bg-gray-100 text-gray-800 text-xs font-semibold">World</a>
+                    <a href="#featured-section" onclick="filterByNav('Politics')" class="px-3.5 py-1.5 rounded-full bg-gray-100 text-gray-800 text-xs font-semibold">Politics</a>
+                    <a href="#categories-section" onclick="filterByNav('Technology')" class="px-3.5 py-1.5 rounded-full bg-gray-100 text-gray-800 text-xs font-semibold">Technology</a>
+                    <a href="#categories-section" onclick="filterByNav('Sports')" class="px-3.5 py-1.5 rounded-full bg-gray-100 text-gray-800 text-xs font-semibold">Sports</a>
+                    <a href="#categories-section" onclick="filterByNav('Entertainment')" class="px-3.5 py-1.5 rounded-full bg-gray-100 text-gray-800 text-xs font-semibold">Entertainment</a>
+                    <a href="#latest-section" onclick="filterByNav('Business')" class="px-3.5 py-1.5 rounded-full bg-gray-100 text-gray-800 text-xs font-semibold">Business</a>
+                    <a href="#latest-section" onclick="filterByNav('Lifestyle')" class="px-3.5 py-1.5 rounded-full bg-gray-100 text-gray-800 text-xs font-semibold">Lifestyle</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ==================== 2. BREAKING NEWS BANNER SECTION ==================== -->
+    <section id="top" class="bg-ink text-white border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-8 py-2.5 flex items-center gap-3 overflow-hidden">
+            <div class="inline-flex items-center gap-2 bg-crimson text-white text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full shrink-0">
+                <span class="w-2 h-2 rounded-full bg-white animate-ping"></span>
+                <span>Breaking News</span>
+            </div>
+            <div class="overflow-hidden relative flex-1">
+                <div class="ticker-track flex items-center gap-10 text-xs sm:text-sm font-medium text-gray-100">
+                    <button onclick="openArticleModal(0)" class="hover:text-amber-300 transition-colors text-left">
+                        &bull; Global Climate Accord Reaches Historic Zero-Emission Grid Milestone in Geneva
+                    </button>
+                    <button onclick="openArticleModal(1)" class="hover:text-amber-300 transition-colors text-left">
+                        &bull; Next-Generation Quantum Processors Shatter Encryption &amp; Drug Discovery Benchmarks
+                    </button>
+                    <button onclick="openArticleModal(2)" class="hover:text-amber-300 transition-colors text-left">
+                        &bull; Central Banks Signal Coordinated Rate Stabilization Ahead of Q4 Trade Summit
+                    </button>
+                    <button onclick="openArticleModal(3)" class="hover:text-amber-300 transition-colors text-left">
+                        &bull; Championship Finals Set Record Global Viewership Across 140 Countries
+                    </button>
+                    <!-- Duplicate set for seamless loop -->
+                    <button onclick="openArticleModal(0)" class="hover:text-amber-300 transition-colors text-left">
+                        &bull; Global Climate Accord Reaches Historic Zero-Emission Grid Milestone in Geneva
+                    </button>
+                    <button onclick="openArticleModal(1)" class="hover:text-amber-300 transition-colors text-left">
+                        &bull; Next-Generation Quantum Processors Shatter Encryption &amp; Drug Discovery Benchmarks
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== LIVE SEARCH RESULTS OVERLAY BANNER ==================== -->
+    <section id="search-results-panel" class="hidden max-w-7xl mx-auto px-4 sm:px-8 pt-6">
+        <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-lg">
+            <div class="flex items-center justify-between border-b border-gray-100 pb-3 mb-4">
+                <h2 class="font-serif text-xl font-bold text-ink">
+                    Search Results for "<span id="search-term-label" class="text-crimson"></span>"
+                </h2>
+                <button onclick="clearSearch()" class="text-xs font-semibold text-gray-500 hover:text-ink px-3 py-1 rounded-full bg-gray-100">
+                    Close Search
+                </button>
+            </div>
+            <div id="search-results-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+        </div>
+    </section>
+
+    <!-- ==================== MAIN EDITORIAL CONTAINER ==================== -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-8 py-8 space-y-14">
+
+        <!-- ==================== 3. FEATURED HEADLINES SECTION ==================== -->
+        <section id="featured-section" class="space-y-6">
+            <div class="flex items-center justify-between border-b-2 border-ink pb-2">
+                <h2 class="font-serif text-2xl sm:text-3xl font-extrabold tracking-tight text-ink">Top Stories &amp; Lead Coverage</h2>
+                <span class="text-xs font-bold uppercase tracking-widest text-crimson">Cover Edition</span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-7">
+                
+                <!-- Large Primary Featured Story (Left 7 Columns) -->
+                <article onclick="openArticleModal(0)" class="editorial-card cursor-pointer lg:col-span-7 bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-xl transition-all flex flex-col">
+                    <div class="relative h-72 sm:h-96 overflow-hidden">
+                        <img 
+                            src="https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=1400&q=85" 
+                            onerror="this.src='https://placehold.co/1200x700/111827/ffffff?text=Global+Summit+Coverage'"
+                            alt="Global Delegates in Geneva Summit" 
+                            class="editorial-img w-full h-full object-cover transition-transform duration-500"
+                        >
+                        <span class="absolute top-4 left-4 bg-crimson text-white text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow">
+                            World &amp; Politics
+                        </span>
+                    </div>
+                    <div class="p-6 sm:p-8 flex-1 flex flex-col justify-between space-y-4">
+                        <div class="space-y-3">
+                            <h1 class="font-serif text-2xl sm:text-4xl font-extrabold leading-tight text-ink hover:text-crimson transition-colors">
+                                Nations Forge Landmark Clean-Grid Pact in Geneva After Marathon Negotiations
+                            </h1>
+                            <p class="text-gray-600 text-sm sm:text-base leading-relaxed">
+                                Energy ministers from 68 countries have signed a binding framework accelerating cross-border renewable transmission lines, battery storage corridors, and industrial decarbonization targets by 2035.
+                            </p>
+                        </div>
+                        <div class="pt-4 border-t border-gray-100 flex flex-wrap items-center justify-between gap-2 text-xs text-gray-500">
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold text-ink">By Eleanor Vance</span>
+                                <span>&bull;</span>
+                                <span>Chief Diplomatic Correspondent</span>
+                            </div>
+                            <span class="font-medium text-gray-600">November 24, 2026 &bull; 6 min read</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Three Smaller Featured News Cards Beside It (Right 5 Columns) -->
+                <div class="lg:col-span-5 flex flex-col justify-between gap-5">
+                    
+                    <!-- Secondary Featured Card 1 -->
+                    <article onclick="openArticleModal(1)" class="editorial-card cursor-pointer bg-white rounded-2xl p-4 border border-gray-200 shadow-sm hover:shadow-md transition-all flex gap-4 items-center">
+                        <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-xl overflow-hidden shrink-0">
+                            <img 
+                                src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80" 
+                                onerror="this.src='https://placehold.co/400x400/1f2937/ffffff?text=Quantum+Tech'"
+                                alt="Quantum processor circuit" 
+                                class="editorial-img w-full h-full object-cover transition-transform duration-500"
+                            >
+                        </div>
+                        <div class="space-y-1.5 min-w-0">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-blue-700">Technology</span>
+                            <h3 class="font-serif text-base sm:text-lg font-bold leading-snug text-ink hover:text-crimson transition-colors line-clamp-2">
+                                Quantum Silicon Breakthrough Cuts Error Rates by Ninety Percent
+                            </h3>
+                            <p class="text-xs text-gray-600 line-clamp-2">
+                                Researchers unveil room-temperature optical stabilizers poised to transform molecular modeling.
+                            </p>
+                            <div class="text-[11px] text-gray-500 pt-1">
+                                <span class="font-semibold text-gray-700">Marcus Chen</span> &bull; Nov 24, 2026
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Secondary Featured Card 2 -->
+                    <article onclick="openArticleModal(2)" class="editorial-card cursor-pointer bg-white rounded-2xl p-4 border border-gray-200 shadow-sm hover:shadow-md transition-all flex gap-4 items-center">
+                        <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-xl overflow-hidden shrink-0">
+                            <img 
+                                src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80" 
+                                onerror="this.src='https://placehold.co/400x400/1f2937/ffffff?text=Global+Markets'"
+                                alt="Financial district skyscrapers" 
+                                class="editorial-img w-full h-full object-cover transition-transform duration-500"
+                            >
+                        </div>
+                        <div class="space-y-1.5 min-w-0">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-700">Business</span>
+                            <h3 class="font-serif text-base sm:text-lg font-bold leading-snug text-ink hover:text-crimson transition-colors line-clamp-2">
+                                Global Supply Chains Pivot Toward Regional Micro-Manufacturing Hubs
+                            </h3>
+                            <p class="text-xs text-gray-600 line-clamp-2">
+                                Automated urban factories reduce shipping emissions and cut delivery windows in half.
+                            </p>
+                            <div class="text-[11px] text-gray-500 pt-1">
+                                <span class="font-semibold text-gray-700">Priya Nair</span> &bull; Nov 24, 2026
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Secondary Featured Card 3 -->
+                    <article onclick="openArticleModal(3)" class="editorial-card cursor-pointer bg-white rounded-2xl p-4 border border-gray-200 shadow-sm hover:shadow-md transition-all flex gap-4 items-center">
+                        <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-xl overflow-hidden shrink-0">
+                            <img 
+                                src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=600&q=80" 
+                                onerror="this.src='https://placehold.co/400x400/1f2937/ffffff?text=Sports+Finals'"
+                                alt="Track athlete sprinting in stadium" 
+                                class="editorial-img w-full h-full object-cover transition-transform duration-500"
+                            >
+                        </div>
+                        <div class="space-y-1.5 min-w-0">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-amber-700">Sports</span>
+                            <h3 class="font-serif text-base sm:text-lg font-bold leading-snug text-ink hover:text-crimson transition-colors line-clamp-2">
+                                Underdog Relays Shatter Two Decade-Old World Records in Tokyo
+                            </h3>
+                            <p class="text-xs text-gray-600 line-clamp-2">
+                                Electrifying final lap stuns capacity crowd at the Continental Athletics Championship.
+                            </p>
+                            <div class="text-[11px] text-gray-500 pt-1">
+                                <span class="font-semibold text-gray-700">Devon Brooks</span> &bull; Nov 23, 2026
+                            </div>
+                        </div>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== 4. NEWS CATEGORIES SHOWCASE ==================== -->
+        <section id="categories-section" class="space-y-6">
+            <div class="flex flex-wrap items-end justify-between gap-4 border-b-2 border-ink pb-2">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-widest text-crimson">Sections &amp; Desks</span>
+                    <h2 class="font-serif text-2xl sm:text-3xl font-extrabold text-ink">News Categories</h2>
+                </div>
+                <!-- Category Filter Pills -->
+                <div class="flex flex-wrap gap-1.5" id="category-tabs">
+                    <button data-cat="All" class="cat-tab px-3.5 py-1.5 rounded-full text-xs font-bold bg-ink text-white transition-colors">All Desks</button>
+                    <button data-cat="World News" class="cat-tab px-3.5 py-1.5 rounded-full text-xs font-bold bg-white border border-gray-200 text-gray-700 hover:border-ink transition-colors">World News</button>
+                    <button data-cat="Technology" class="cat-tab px-3.5 py-1.5 rounded-full text-xs font-bold bg-white border border-gray-200 text-gray-700 hover:border-ink transition-colors">Technology</button>
+                    <button data-cat="Education" class="cat-tab px-3.5 py-1.5 rounded-full text-xs font-bold bg-white border border-gray-200 text-gray-700 hover:border-ink transition-colors">Education</button>
+                    <button data-cat="Sports" class="cat-tab px-3.5 py-1.5 rounded-full text-xs font-bold bg-white border border-gray-200 text-gray-700 hover:border-ink transition-colors">Sports</button>
+                    <button data-cat="Health" class="cat-tab px-3.5 py-1.5 rounded-full text-xs font-bold bg-white border border-gray-200 text-gray-700 hover:border-ink transition-colors">Health</button>
+                    <button data-cat="Entertainment" class="cat-tab px-3.5 py-1.5 rounded-full text-xs font-bold bg-white border border-gray-200 text-gray-700 hover:border-ink transition-colors">Entertainment</button>
+                </div>
+            </div>
+
+            <!-- 6 Category Cards Grid -->
+            <div id="categories-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Populated dynamically via JS -->
+            </div>
+        </section>
+
+        <!-- ==================== 5 & 7. LATEST NEWS + SIDEBAR SECTION ==================== -->
+        <section id="latest-section" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- 5. Latest News Section (Left 8 Columns) -->
+            <div class="lg:col-span-8 space-y-6">
+                <div class="flex items-center justify-between border-b-2 border-ink pb-2">
+                    <h2 class="font-serif text-2xl sm:text-3xl font-extrabold text-ink">Latest News</h2>
+                    <span class="text-xs font-semibold text-gray-500">Updated Continuously</span>
+                </div>
+
+                <!-- Card-Based Latest News Grid -->
+                <div id="latest-news-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </div>
+
+            <!-- 7. Sidebar Section (Right 4 Columns) -->
+            <aside class="lg:col-span-4 space-y-7 sticky top-28">
+                
+                <!-- Sidebar Widget 1: Trending Topics -->
+                <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm space-y-4">
+                    <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+                        <h3 class="font-serif text-lg font-extrabold text-ink flex items-center gap-2">
+                            <i data-lucide="hash" class="w-4 h-4 text-crimson"></i>
+                            <span>Trending Topics</span>
+                        </h3>
+                        <span class="text-[11px] font-semibold text-gray-400">Live Tags</span>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="triggerTopicSearch('Climate')" class="px-3 py-1.5 rounded-full bg-gray-100 hover:bg-crimson hover:text-white text-xs font-semibold text-gray-800 transition-colors">#ClimateAccord</button>
+                        <button onclick="triggerTopicSearch('Quantum')" class="px-3 py-1.5 rounded-full bg-gray-100 hover:bg-crimson hover:text-white text-xs font-semibold text-gray-800 transition-colors">#QuantumAI</button>
+                        <button onclick="triggerTopicSearch('Health')" class="px-3 py-1.5 rounded-full bg-gray-100 hover:bg-crimson hover:text-white text-xs font-semibold text-gray-800 transition-colors">#LongevityScience</button>
+                        <button onclick="triggerTopicSearch('Education')" class="px-3 py-1.5 rounded-full bg-gray-100 hover:bg-crimson hover:text-white text-xs font-semibold text-gray-800 transition-colors">#FutureClassrooms</button>
+                        <button onclick="triggerTopicSearch('Cinema')" class="px-3 py-1.5 rounded-full bg-gray-100 hover:bg-crimson hover:text-white text-xs font-semibold text-gray-800 transition-colors">#WorldCinema</button>
+                        <button onclick="triggerTopicSearch('Markets')" class="px-3 py-1.5 rounded-full bg-gray-100 hover:bg-crimson hover:text-white text-xs font-semibold text-gray-800 transition-colors">#GlobalMarkets</button>
+                    </div>
+                </div>
+
+                <!-- Sidebar Widget 2: Popular Articles -->
+                <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm space-y-4">
+                    <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+                        <h3 class="font-serif text-lg font-extrabold text-ink flex items-center gap-2">
+                            <i data-lucide="flame" class="w-4 h-4 text-crimson"></i>
+                            <span>Popular Articles</span>
+                        </h3>
+                        <span class="text-[11px] font-semibold text-gray-400">Most Read</span>
+                    </div>
+                    <ol class="space-y-4 divide-y divide-gray-100">
+                        <li onclick="openArticleModal(0)" class="pt-1 flex items-start gap-3.5 cursor-pointer group">
+                            <span class="font-serif text-2xl font-extrabold text-gray-300 group-hover:text-crimson transition-colors leading-none">01</span>
+                            <div>
+                                <h4 class="font-serif text-sm font-bold text-ink group-hover:text-crimson transition-colors leading-snug">
+                                    Nations Forge Landmark Clean-Grid Pact in Geneva
+                                </h4>
+                                <span class="text-[11px] text-gray-500">World &bull; 148K reads</span>
+                            </div>
+                        </li>
+                        <li onclick="openArticleModal(4)" class="pt-3 flex items-start gap-3.5 cursor-pointer group">
+                            <span class="font-serif text-2xl font-extrabold text-gray-300 group-hover:text-crimson transition-colors leading-none">02</span>
+                            <div>
+                                <h4 class="font-serif text-sm font-bold text-ink group-hover:text-crimson transition-colors leading-snug">
+                                    How Bilingual AI Tutors Are Closing Rural STEM Gaps
+                                </h4>
+                                <span class="text-[11px] text-gray-500">Education &bull; 112K reads</span>
+                            </div>
+                        </li>
+                        <li onclick="openArticleModal(5)" class="pt-3 flex items-start gap-3.5 cursor-pointer group">
+                            <span class="font-serif text-2xl font-extrabold text-gray-300 group-hover:text-crimson transition-colors leading-none">03</span>
+                            <div>
+                                <h4 class="font-serif text-sm font-bold text-ink group-hover:text-crimson transition-colors leading-snug">
+                                    Circadian Nutrition: Why Meal Timing Matters More Than Calories
+                                </h4>
+                                <span class="text-[11px] text-gray-500">Health &bull; 96K reads</span>
+                            </div>
+                        </li>
+                        <li onclick="openArticleModal(6)" class="pt-3 flex items-start gap-3.5 cursor-pointer group">
+                            <span class="font-serif text-2xl font-extrabold text-gray-300 group-hover:text-crimson transition-colors leading-none">04</span>
+                            <div>
+                                <h4 class="font-serif text-sm font-bold text-ink group-hover:text-crimson transition-colors leading-snug">
+                                    Independent Sci-Fi Directors Redefine Practical Visual Effects
+                                </h4>
+                                <span class="text-[11px] text-gray-500">Entertainment &bull; 84K reads</span>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+
+                <!-- Sidebar Widget 3: Recent Posts -->
+                <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm space-y-4">
+                    <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+                        <h3 class="font-serif text-lg font-extrabold text-ink flex items-center gap-2">
+                            <i data-lucide="clock" class="w-4 h-4 text-crimson"></i>
+                            <span>Recent Posts</span>
+                        </h3>
+                        <span class="text-[11px] font-semibold text-gray-400">Dispatch</span>
+                    </div>
+                    <div class="space-y-4">
+                        <div onclick="openArticleModal(7)" class="flex items-center gap-3 cursor-pointer group">
+                            <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=200&q=80" onerror="this.src='https://placehold.co/150x150/111827/ffffff?text=Post'" alt="Business executive" class="w-14 h-14 rounded-xl object-cover shrink-0">
+                            <div class="min-w-0">
+                                <h4 class="text-xs font-bold text-ink group-hover:text-crimson transition-colors line-clamp-2">
+                                    Four-Day Workweek Trials Report Sustained Productivity Gains
+                                </h4>
+                                <span class="text-[11px] text-gray-400 block mt-0.5">22 mins ago</span>
+                            </div>
+                        </div>
+                        <div onclick="openArticleModal(8)" class="flex items-center gap-3 cursor-pointer group">
+                            <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=200&q=80" onerror="this.src='https://placehold.co/150x150/111827/ffffff?text=Post'" alt="Minimalist architecture" class="w-14 h-14 rounded-xl object-cover shrink-0">
+                            <div class="min-w-0">
+                                <h4 class="text-xs font-bold text-ink group-hover:text-crimson transition-colors line-clamp-2">
+                                    Biophilic Architecture: Designing Apartments That Lower Cortisol
+                                </h4>
+                                <span class="text-[11px] text-gray-400 block mt-0.5">1 hour ago</span>
+                            </div>
+                        </div>
+                        <div onclick="openArticleModal(9)" class="flex items-center gap-3 cursor-pointer group">
+                            <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=200&q=80" onerror="this.src='https://placehold.co/150x150/111827/ffffff?text=Post'" alt="Earth orbit satellite" class="w-14 h-14 rounded-xl object-cover shrink-0">
+                            <div class="min-w-0">
+                                <h4 class="text-xs font-bold text-ink group-hover:text-crimson transition-colors line-clamp-2">
+                                    Orbital Solar Arrays Complete First Wireless Power Beam Test
+                                </h4>
+                                <span class="text-[11px] text-gray-400 block mt-0.5">2 hours ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </aside>
+        </section>
+
+        <!-- ==================== 6. TRENDING STORIES HIGHLIGHT SECTION ==================== -->
+        <section id="trending-section" class="bg-ink text-white rounded-3xl p-6 sm:p-10 shadow-xl space-y-6">
+            <div class="flex flex-wrap items-end justify-between gap-4 border-b border-white/15 pb-4">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-widest text-amber-400">Most Shared Worldwide</span>
+                    <h2 class="font-serif text-2xl sm:text-3xl font-extrabold text-white mt-1">Trending Stories</h2>
+                </div>
+                <span class="text-xs text-gray-400">Curated by Reader Engagement &amp; Editorial Impact</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Trending Card 1 -->
+                <article onclick="openArticleModal(1)" class="editorial-card cursor-pointer bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl overflow-hidden transition-all flex flex-col">
+                    <div class="h-44 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80" alt="Quantum Tech" class="editorial-img w-full h-full object-cover transition-transform duration-500">
+                        <span class="absolute top-3 left-3 w-7 h-7 rounded-full bg-crimson text-white text-xs font-extrabold flex items-center justify-center">#1</span>
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between space-y-2">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-amber-400">Technology</span>
+                        <h3 class="font-serif text-base font-bold text-white leading-snug">
+                            Quantum Silicon Breakthrough Cuts Error Rates by Ninety Percent
+                        </h3>
+                        <p class="text-xs text-gray-400">Marcus Chen &bull; 5 min read</p>
+                    </div>
+                </article>
+
+                <!-- Trending Card 2 -->
+                <article onclick="openArticleModal(4)" class="editorial-card cursor-pointer bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl overflow-hidden transition-all flex flex-col">
+                    <div class="h-44 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=600&q=80" alt="Education" class="editorial-img w-full h-full object-cover transition-transform duration-500">
+                        <span class="absolute top-3 left-3 w-7 h-7 rounded-full bg-crimson text-white text-xs font-extrabold flex items-center justify-center">#2</span>
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between space-y-2">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-amber-400">Education</span>
+                        <h3 class="font-serif text-base font-bold text-white leading-snug">
+                            How Bilingual AI Tutors Are Closing Rural STEM Gaps Across Continents
+                        </h3>
+                        <p class="text-xs text-gray-400">Dr. Ananya Rao &bull; 4 min read</p>
+                    </div>
+                </article>
+
+                <!-- Trending Card 3 -->
+                <article onclick="openArticleModal(5)" class="editorial-card cursor-pointer bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl overflow-hidden transition-all flex flex-col">
+                    <div class="h-44 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1505576399279-565b52d4ac71?auto=format&fit=crop&w=600&q=80" alt="Health" class="editorial-img w-full h-full object-cover transition-transform duration-500">
+                        <span class="absolute top-3 left-3 w-7 h-7 rounded-full bg-crimson text-white text-xs font-extrabold flex items-center justify-center">#3</span>
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between space-y-2">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-amber-400">Health</span>
+                        <h3 class="font-serif text-base font-bold text-white leading-snug">
+                            Circadian Nutrition: Why Meal Timing Matters More Than Calories
+                        </h3>
+                        <p class="text-xs text-gray-400">Dr. Hannah Lindqvist &bull; 7 min read</p>
+                    </div>
+                </article>
+
+                <!-- Trending Card 4 -->
+                <article onclick="openArticleModal(6)" class="editorial-card cursor-pointer bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl overflow-hidden transition-all flex flex-col">
+                    <div class="h-44 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=600&q=80" alt="Entertainment" class="editorial-img w-full h-full object-cover transition-transform duration-500">
+                        <span class="absolute top-3 left-3 w-7 h-7 rounded-full bg-crimson text-white text-xs font-extrabold flex items-center justify-center">#4</span>
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between space-y-2">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-amber-400">Entertainment</span>
+                        <h3 class="font-serif text-base font-bold text-white leading-snug">
+                            Independent Sci-Fi Directors Redefine Practical Visual Effects
+                        </h3>
+                        <p class="text-xs text-gray-400">Julian Thorne &bull; 5 min read</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==================== FOOTER SECTION ==================== -->
+    <footer class="bg-white border-t border-gray-200 mt-16 py-12 px-4 sm:px-8">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 pb-8 border-b border-gray-100">
+            <div class="md:col-span-2 space-y-3">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-lg bg-ink text-white flex items-center justify-center">
+                        <i data-lucide="newspaper" class="w-5 h-5"></i>
+                    </div>
+                    <span class="font-serif text-2xl font-extrabold text-ink">THE DAILY TIMES</span>
+                </div>
+                <p class="text-xs sm:text-sm text-gray-600 max-w-md leading-relaxed">
+                    Independent global journalism dedicated to rigorous reporting across world affairs, science, business, sports, and modern culture.
+                </p>
+            </div>
+            <div>
+                <h4 class="text-xs font-bold uppercase tracking-wider text-ink mb-3">Sections</h4>
+                <ul class="space-y-2 text-xs text-gray-600">
+                    <li><a href="#featured-section" class="hover:text-crimson">World &amp; Politics</a></li>
+                    <li><a href="#categories-section" class="hover:text-crimson">Technology &amp; Science</a></li>
+                    <li><a href="#categories-section" class="hover:text-crimson">Education &amp; Health</a></li>
+                    <li><a href="#categories-section" class="hover:text-crimson">Sports &amp; Entertainment</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-xs font-bold uppercase tracking-wider text-ink mb-3">Newsletter</h4>
+                <p class="text-xs text-gray-600 mb-3">Get our Morning Briefing delivered daily at 6:00 AM.</p>
+                <button onclick="openSubscribeModal()" class="bg-ink hover:bg-crimson text-white text-xs font-bold px-4 py-2.5 rounded-full transition-colors">
+                    Subscribe Free
+                </button>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500">
+            <span>&copy; 2026 The Daily Times Media Group. All rights reserved.</span>
+            <div class="flex gap-5">
+                <a href="#top" class="hover:text-ink">Privacy Policy</a>
+                <a href="#top" class="hover:text-ink">Editorial Standards</a>
+                <a href="#top" class="hover:text-ink">Contact Newsroom</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== FULL ARTICLE READER MODAL ==================== -->
+    <div id="article-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 backdrop-blur-sm p-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl border border-gray-200 my-8">
+            <div class="relative h-60 sm:h-72">
+                <img id="modal-article-img" src="" alt="Article Cover" class="w-full h-full object-cover">
+                <button onclick="closeArticleModal()" aria-label="Close Article" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 hover:bg-white text-ink flex items-center justify-center shadow-lg">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+                <span id="modal-article-cat" class="absolute bottom-4 left-6 bg-crimson text-white text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full">
+                    Category
+                </span>
+            </div>
+            <div class="p-6 sm:p-8 space-y-4">
+                <h2 id="modal-article-title" class="font-serif text-2xl sm:text-3xl font-extrabold text-ink leading-tight"></h2>
+                <div class="flex items-center justify-between text-xs text-gray-500 border-b border-gray-100 pb-3">
+                    <span id="modal-article-author" class="font-bold text-ink"></span>
+                    <span id="modal-article-date"></span>
+                </div>
+                <p id="modal-article-body" class="text-sm sm:text-base text-gray-700 leading-relaxed space-y-3"></p>
+                <div class="pt-4 flex justify-end">
+                    <button onclick="closeArticleModal()" class="bg-ink hover:bg-crimson text-white text-xs font-bold px-6 py-2.5 rounded-full transition-colors">
+                        Back to Front Page
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== SUBSCRIBE MODAL ==================== -->
+    <div id="subscribe-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-gray-200 relative space-y-4">
+            <button onclick="closeSubscribeModal()" aria-label="Close Subscribe Modal" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 text-ink flex items-center justify-center">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+            <div class="inline-flex items-center gap-2 text-crimson text-xs font-bold uppercase tracking-wider">
+                <i data-lucide="newspaper" class="w-4 h-4"></i>
+                <span>The Daily Times Digital</span>
+            </div>
+            <h3 class="font-serif text-2xl font-extrabold text-ink">Unlimited Access to Trusted Journalism</h3>
+            <p class="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                Subscribe to receive our daily morning edition, breaking news alerts, and full access to investigative reports.
+            </p>
+            <form id="subscribe-form" class="space-y-3 pt-1">
+                <input 
+                    type="email" 
+                    id="subscriber-email" 
+                    required 
+                    placeholder="Enter your email address..." 
+                    class="w-full border border-gray-300 focus:border-ink rounded-xl px-4 py-3 text-sm focus:outline-none"
+                >
+                <button type="submit" class="w-full bg-crimson hover:bg-red-800 text-white font-bold text-sm py-3 rounded-xl shadow transition-colors">
+                    Start Subscription
+                </button>
+            </form>
+            <p id="subscribe-feedback" class="hidden text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-center">
+                Thank you for subscribing to The Daily Times! Check your inbox for today's edition.
+            </p>
+        </div>
+    </div>
+
+    <!-- ==================== JAVASCRIPT EDITORIAL DATA & INTERACTIVITY ==================== -->
+    <script>
+        // Comprehensive Editorial Dataset
+        const articles = [
+            {
+                id: 0,
+                category: "World News",
+                title: "Nations Forge Landmark Clean-Grid Pact in Geneva After Marathon Negotiations",
+                excerpt: "Energy ministers from 68 countries signed a binding framework accelerating cross-border renewable transmission lines and battery storage corridors.",
+                fullText: "GENEVA — Following ten days of round-the-clock diplomacy, energy and climate delegates from 68 nations ratified the Geneva Clean-Grid Accord on Tuesday. The agreement establishes shared financing for high-voltage subsea interconnectors and regional grid storage hubs, ensuring surplus solar and wind generation can be balanced across time zones without fossil-fuel backup.",
+                author: "Eleanor Vance",
+                date: "November 24, 2026",
+                image: "https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 1,
+                category: "Technology",
+                title: "Quantum Silicon Breakthrough Cuts Error Rates by Ninety Percent",
+                excerpt: "Researchers unveil room-temperature optical stabilizers poised to transform molecular modeling and secure communications.",
+                fullText: "ZURICH — A consortium of photonics and quantum hardware engineers has demonstrated a silicon-compatible optical error-correction lattice that stabilizes qubits without extreme cryogenic overhead. Analysts say the milestone brings practical pharmaceutical simulation and next-generation materials engineering years closer to commercial deployment.",
+                author: "Marcus Chen",
+                date: "November 24, 2026",
+                image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 2,
+                category: "Business",
+                title: "Global Supply Chains Pivot Toward Regional Micro-Manufacturing Hubs",
+                excerpt: "Automated urban factories reduce transoceanic shipping emissions and cut consumer delivery windows in half.",
+                fullText: "SINGAPORE — Major industrial manufacturers are increasingly replacing single mega-factories with distributed, robotics-driven regional micro-hubs located near major metropolitan ports. Early adopters report a 42% drop in inventory holding costs and dramatically improved resilience against weather disruptions.",
+                author: "Priya Nair",
+                date: "November 24, 2026",
+                image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 3,
+                category: "Sports",
+                title: "Underdog Relays Shatter Two Decade-Old World Records in Tokyo",
+                excerpt: "Electrifying final lap stuns capacity crowd at the Continental Athletics Championship with historic split times.",
+                fullText: "TOKYO — In one of the most dramatic finishes in track and field history, the mixed 4x400-meter relay squad overturned a six-meter deficit on the anchor leg to clock a stunning world record. Stadium officials confirmed trackside sensors recorded the fastest final 100-meter split ever measured in championship competition.",
+                author: "Devon Brooks",
+                date: "November 23, 2026",
+                image: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 4,
+                category: "Education",
+                title: "How Bilingual AI Tutors Are Closing Rural STEM Gaps Across Continents",
+                excerpt: "Offline-capable adaptive learning tablets are helping middle-school students master algebra and physics in their native languages.",
+                fullText: "NAIROBI — Pilot programs deploying solar-charged, offline-capable adaptive learning devices across 1,200 rural schools have yielded a 34% jump in standardized mathematics scores over two semesters. Teachers emphasize that the software acts as a personalized lab assistant rather than a replacement for classroom mentorship.",
+                author: "Dr. Ananya Rao",
+                date: "November 23, 2026",
+                image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 5,
+                category: "Health",
+                title: "Circadian Nutrition: Why Meal Timing Matters More Than Calories",
+                excerpt: "Multi-year clinical trials reveal aligning nutrient intake with daylight hours improves metabolic sensitivity and sleep quality.",
+                fullText: "BOSTON — Researchers tracking 4,500 adults over five years found that consuming the majority of daily calories within an eight-to-ten-hour daytime window significantly improved insulin sensitivity and cardiovascular markers—even when total caloric intake remained unchanged.",
+                author: "Dr. Hannah Lindqvist",
+                date: "November 22, 2026",
+                image: "https://images.unsplash.com/photo-1505576399279-565b52d4ac71?auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 6,
+                category: "Entertainment",
+                title: "Independent Sci-Fi Directors Redefine Practical Visual Effects",
+                excerpt: "Miniature architectural sets and real-time LED stagecraft earn standing ovations at international autumn film festivals.",
+                fullText: "LONDON — Audiences weary of synthetic computer-generated spectacle are flocking to a new wave of independent science-fiction cinema built around handcrafted scale models, in-camera optical illusions, and live orchestral scores.",
+                author: "Julian Thorne",
+                date: "November 22, 2026",
+                image: "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 7,
+                category: "Business",
+                title: "Four-Day Workweek Trials Report Sustained Productivity Gains",
+                excerpt: "New longitudinal data from 180 firms shows lower employee burnout and higher client retention two years after transition.",
+                fullText: "STOCKHOLM — Follow-up audits of companies that adopted a 32-hour, four-day workweek in 2024 confirm that initial productivity surges were not temporary. Over 91% of participating firms retained the policy permanently, citing sharper meeting discipline and reduced turnover.",
+                author: "Claire Beaumont",
+                date: "November 24, 2026",
+                image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 8,
+                category: "Lifestyle",
+                title: "Biophilic Architecture: Designing Apartments That Lower Cortisol",
+                excerpt: "Urban architects integrate indoor courtyards, natural timber acoustics, and circadian daylighting into dense city housing.",
+                fullText: "COPENHAGEN — Modern residential towers are increasingly incorporating living atrium gardens, passive cross-ventilation, and dynamic skylight diffusers designed to mirror natural outdoor light cycles and improve resident wellbeing.",
+                author: "Soren Lindholm",
+                date: "November 24, 2026",
+                image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 9,
+                category: "Technology",
+                title: "Orbital Solar Arrays Complete First Wireless Power Beam Test",
+                excerpt: "Demonstrator satellite transmits continuous clean microwave energy to ground rectenna station in desert trial.",
+                fullText: "PASADENA — Aerospace engineers have successfully beamed clean electrical energy from low-Earth orbit to a terrestrial receiving array, proving that space-based solar collectors could one day supply uninterrupted baseload power regardless of cloud cover.",
+                author: "David Morales",
+                date: "November 23, 2026",
+                image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1000&q=80"
+            }
+        ];
+
+        // Category Showcase Definitions (World News, Technology, Education, Sports, Health, Entertainment)
+        const categoryDesks = [
+            { name: "World News", articleId: 0, badgeColor: "bg-red-700", subHeadline: "Diplomatic accords, global trade corridors, and international policy analysis." },
+            { name: "Technology", articleId: 1, badgeColor: "bg-blue-700", subHeadline: "Quantum computing, clean aerospace engineering, and ethical artificial intelligence." },
+            { name: "Education", articleId: 4, badgeColor: "bg-indigo-700", subHeadline: "Global literacy initiatives, university research, and modern classroom innovation." },
+            { name: "Sports", articleId: 3, badgeColor: "bg-amber-700", subHeadline: "Championship athletics, international tournaments, and athlete profiles." },
+            { name: "Health", articleId: 5, badgeColor: "bg-emerald-700", subHeadline: "Preventive medicine, longevity breakthroughs, and public wellness science." },
+            { name: "Entertainment", articleId: 6, badgeColor: "bg-purple-700", subHeadline: "World cinema, literature, visual arts, and cultural criticism." }
+        ];
+
+        let activeCategory = "All";
+
+        // Render News Categories Grid
+        function renderCategories() {
+            const grid = document.getElementById('categories-grid');
+            const filtered = activeCategory === "All"
+                ? categoryDesks
+                : categoryDesks.filter(c => c.name === activeCategory);
+
+            grid.innerHTML = filtered.map(desk => {
+                const art = articles[desk.articleId];
+                return `
+                <article onclick="openArticleModal(${art.id})" class="editorial-card cursor-pointer bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-lg transition-all flex flex-col">
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="${art.image}" onerror="this.src='https://placehold.co/600x400/111827/ffffff?text=${encodeURIComponent(desk.name)}'" alt="${desk.name}" class="editorial-img w-full h-full object-cover transition-transform duration-500">
+                        <span class="absolute top-3 left-3 ${desk.badgeColor} text-white text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow">
+                            ${desk.name}
+                        </span>
+                    </div>
+                    <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
+                        <div>
+                            <h3 class="font-serif text-lg font-bold text-ink hover:text-crimson transition-colors leading-snug">
+                                ${art.title}
+                            </h3>
+                            <p class="text-xs text-gray-500 mt-1.5 leading-relaxed">${desk.subHeadline}</p>
+                        </div>
+                        <div class="pt-3 border-t border-gray-100 flex items-center justify-between text-xs">
+                            <span class="font-semibold text-gray-700">${art.author}</span>
+                            <span class="text-crimson font-bold inline-flex items-center gap-1">
+                                Explore <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                            </span>
+                        </div>
+                    </div>
+                </article>
+                `;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        // Render Latest News Cards
+        function renderLatestNews() {
+            const grid = document.getElementById('latest-news-grid');
+            const latestList = articles.slice(4, 10);
+
+            grid.innerHTML = latestList.map(art => `
+                <article class="editorial-card bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-lg transition-all flex flex-col">
+                    <div onclick="openArticleModal(${art.id})" class="cursor-pointer relative h-48 overflow-hidden">
+                        <img src="${art.image}" onerror="this.src='https://placehold.co/600x400/1f2937/ffffff?text=Latest+News'" alt="${art.title}" class="editorial-img w-full h-full object-cover transition-transform duration-500">
+                        <span class="absolute top-3 left-3 bg-ink/85 backdrop-blur-sm text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
+                            ${art.category}
+                        </span>
+                    </div>
+                    <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+                        <div class="space-y-2">
+                            <h3 onclick="openArticleModal(${art.id})" class="cursor-pointer font-serif text-lg font-bold text-ink hover:text-crimson transition-colors leading-snug">
+                                ${art.title}
+                            </h3>
+                            <p class="text-xs sm:text-sm text-gray-600 line-clamp-2 leading-relaxed">
+                                ${art.excerpt}
+                            </p>
+                        </div>
+                        <div class="pt-3 border-t border-gray-100 flex items-center justify-between gap-2 text-xs">
+                            <div class="text-gray-500 truncate">
+                                <span class="font-bold text-ink">${art.author}</span> &bull; <span>${art.date}</span>
+                            </div>
+                            <button onclick="openArticleModal(${art.id})" class="text-crimson hover:text-red-800 font-bold inline-flex items-center gap-1 shrink-0">
+                                Read More <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </article>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        // Category Filter Handler
+        document.querySelectorAll('.cat-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                activeCategory = tab.dataset.cat;
+                document.querySelectorAll('.cat-tab').forEach(t => {
+                    t.classList.remove('bg-ink', 'text-white');
+                    t.classList.add('bg-white', 'border', 'border-gray-200', 'text-gray-700');
+                });
+                tab.classList.add('bg-ink', 'text-white');
+                tab.classList.remove('bg-white', 'border', 'border-gray-200', 'text-gray-700');
+                renderCategories();
+            });
+        });
+
+        function filterByNav(categoryName) {
+            document.getElementById('mobile-nav-drawer').classList.add('hidden');
+            const matchingTab = Array.from(document.querySelectorAll('.cat-tab')).find(t => t.dataset.cat === categoryName);
+            if (matchingTab) {
+                matchingTab.click();
+            }
+        }
+
+        // Live Search Functionality
+        const searchInput = document.getElementById('news-search-input');
+        const clearSearchBtn = document.getElementById('clear-search-btn');
+        const searchPanel = document.getElementById('search-results-panel');
+        const searchGrid = document.getElementById('search-results-grid');
+        const searchTermLabel = document.getElementById('search-term-label');
+
+        searchInput.addEventListener('input', (e) => {
+            const q = e.target.value.trim().toLowerCase();
+            if (!q) {
+                clearSearch();
+                return;
+            }
+            clearSearchBtn.classList.remove('hidden');
+            searchPanel.classList.remove('hidden');
+            searchTermLabel.textContent = e.target.value.trim();
+
+            const matches = articles.filter(a =>
+                a.title.toLowerCase().includes(q) ||
+                a.category.toLowerCase().includes(q) ||
+                a.excerpt.toLowerCase().includes(q) ||
+                a.author.toLowerCase().includes(q)
+            );
+
+            if (matches.length === 0) {
+                searchGrid.innerHTML = `<p class="text-sm text-gray-500 col-span-full py-2">No articles matched "${e.target.value.trim()}".</p>`;
+            } else {
+                searchGrid.innerHTML = matches.map(art => `
+                    <div onclick="openArticleModal(${art.id})" class="cursor-pointer flex items-center gap-3.5 p-3 rounded-xl border border-gray-200 hover:border-ink transition-all">
+                        <img src="${art.image}" alt="${art.title}" class="w-16 h-16 rounded-lg object-cover shrink-0">
+                        <div class="min-w-0">
+                            <span class="text-[10px] font-bold uppercase text-crimson">${art.category}</span>
+                            <h4 class="font-serif text-sm font-bold text-ink truncate">${art.title}</h4>
+                            <span class="text-[11px] text-gray-500">${art.author} &bull; ${art.date}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        });
+
+        function clearSearch() {
+            searchInput.value = '';
+            clearSearchBtn.classList.add('hidden');
+            searchPanel.classList.add('hidden');
+        }
+        clearSearchBtn.addEventListener('click', clearSearch);
+
+        function triggerTopicSearch(keyword) {
+            searchInput.value = keyword;
+            searchInput.dispatchEvent(new Event('input'));
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Article Reader Modal Controls
+        function openArticleModal(id) {
+            const art = articles.find(a => a.id === id) || articles[0];
+            document.getElementById('modal-article-img').src = art.image;
+            document.getElementById('modal-article-cat').textContent = art.category;
+            document.getElementById('modal-article-title').textContent = art.title;
+            document.getElementById('modal-article-author').textContent = `By ${art.author}`;
+            document.getElementById('modal-article-date').textContent = art.date;
+            document.getElementById('modal-article-body').textContent = art.fullText;
+
+            const modal = document.getElementById('article-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeArticleModal() {
+            const modal = document.getElementById('article-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // Subscribe Modal Controls
+        function openSubscribeModal() {
+            document.getElementById('subscribe-feedback').classList.add('hidden');
+            const modal = document.getElementById('subscribe-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeSubscribeModal() {
+            const modal = document.getElementById('subscribe-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        document.getElementById('subscribe-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            document.getElementById('subscriber-email').value = '';
+            document.getElementById('subscribe-feedback').classList.remove('hidden');
+        });
+
+        // Mobile Navigation Drawer Toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-nav-drawer').classList.toggle('hidden');
+        });
+
+        // Initialize Page Content
+        window.addEventListener('DOMContentLoaded', () => {
+            renderCategories();
+            renderLatestNews();
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>
